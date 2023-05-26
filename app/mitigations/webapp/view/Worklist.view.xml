@@ -2,17 +2,18 @@
     controllerName="ns.mitigations.controller.Worklist"
     xmlns="sap.m"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns:semantic="sap.f.semantic">
-
+    xmlns:semantic="sap.f.semantic"
+>
     <semantic:SemanticPage
         id="page"
         headerPinnable="false"
-        toggleHeaderOnTitleClick="false">
-
+        toggleHeaderOnTitleClick="false"
+    >
         <semantic:titleHeading>
             <Title
                 text="{i18n>worklistTitle}"
-                level="H2"/>
+                level="H2"
+            />
         </semantic:titleHeading>
 
         <semantic:content>
@@ -30,45 +31,61 @@
                 busyIndicatorDelay="{worklistView>/tableBusyDelay}"
                 growing="true"
                 growingScrollToLoad="true"
-                updateFinished=".onUpdateFinished">
-
+                updateFinished=".onUpdateFinished"
+            >
                 <headerToolbar>
                     <OverflowToolbar>
                         <Title
                             id="tableHeader"
                             text="{worklistView>/worklistTableTitle}"
-                            level="H3"/>
+                            level="H3"
+                        />
                         <ToolbarSpacer />
                         <SearchField
                             id="searchField"
                             tooltip="{i18n>worklistSearchTooltip}"
-                            search=".onSearch">
+                            search=".onSearch"
+                        >
                             <layoutData>
                                 <OverflowToolbarLayoutData
                                     maxWidth="200px"
-                                    priority="NeverOverflow"/>
+                                    priority="NeverOverflow"
+                                />
                             </layoutData>
                         </SearchField>
                     </OverflowToolbar>
                 </headerToolbar>
 
                 <columns>
-                    <Column id="nameColumn">
-                        <Text text="{i18n>tableNameColumnTitle}" id="nameColumnTitle"/>
+                    <Column id="DescriptionColumn">
+                        <Text
+                            text="Description"
+                            id="DescriptionColumnTitle"
+                        />
                     </Column>
-                    <Column id="unitNumberColumn" hAlign="End">
-                        <Text text="{i18n>tableUnitNumberColumnTitle}" id="unitNumberColumnTitle"/>
+                    <Column id="OwnerColumn">
+                        <Text
+                            text="Owner"
+                            id="OwnerColumnTitle"
+                        />
+                    </Column>
+                    <Column id="TimelineColumn">
+                        <Text
+                            text="Timeline"
+                            id="TimelineColumnTitle"
+                        />
                     </Column>
                 </columns>
 
                 <items>
                     <ColumnListItem
                         type="Navigation"
-                        press=".onPress">
+                        press=".onPress"
+                    >
                         <cells>
-                            <ObjectIdentifier
-                                title="{ID}"/>
-                            <ObjectNumber />
+                            <ObjectIdentifier text="{description}" />
+                            <Text text="{owner}" />
+                            <Text text="{timeline}" />
                         </cells>
                     </ColumnListItem>
                 </items>
@@ -76,9 +93,10 @@
         </semantic:content>
 
         <semantic:sendEmailAction>
-            <semantic:SendEmailAction id="shareEmail" press=".onShareEmailPress"/>
+            <semantic:SendEmailAction
+                id="shareEmail"
+                press=".onShareEmailPress"
+            />
         </semantic:sendEmailAction>
-
     </semantic:SemanticPage>
-
 </mvc:View>
