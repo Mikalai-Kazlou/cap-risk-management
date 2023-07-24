@@ -1,15 +1,15 @@
 _schema-version: "3.1"
-ID: cpapp
+ID: rmngm
 description: A simple CAP project.
 version: 1.0.0
 modules:
-  - name: cpapp-srv
+  - name: rmngm-srv
     type: nodejs
     path: gen/srv
     requires:
-      - name: cpapp-db
-      - name: cpapp-uaa
-      - name: cpapp-logs
+      - name: rmngm-db
+      - name: rmngm-xsuaa
+      - name: rmngm-logs
     provides:
       - name: srv-api
         properties:
@@ -18,27 +18,27 @@ modules:
       buildpack: nodejs_buildpack
     build-parameters:
       builder: npm-ci
-  - name: cpapp-db-deployer
+  - name: rmngm-db-deployer
     type: hdb
     path: gen/db
     requires:
-      - name: cpapp-db
-      - name: cpapp-logs
+      - name: rmngm-db
+      - name: rmngm-logs
     parameters:
       buildpack: nodejs_buildpack
-  - name: cpapp-destinations
+  - name: rmngm-destinations
     type: com.sap.application.content
     requires:
-      - name: cpapp-uaa
+      - name: rmngm-xsuaa
         parameters:
           service-key:
-            name: cpapp-uaa-key
-      - name: cpapp-html5-repo-host
+            name: rmngm-xsuaa-key
+      - name: rmngm-html5
         parameters:
           service-key:
-            name: cpapp-html5-repo-host-key
+            name: rmngm-html5-key
       - name: srv-api
-      - name: cpapp-destination
+      - name: rmngm-destination
         parameters:
           content-target: true
     parameters:
@@ -46,28 +46,28 @@ modules:
         instance:
           destinations:
             - Authentication: OAuth2UserTokenExchange
-              Name: cpapp-app-srv
-              TokenServiceInstanceName: cpapp-uaa
-              TokenServiceKeyName: cpapp-uaa-key
+              Name: rmngm-app-srv
+              TokenServiceInstanceName: rmngm-xsuaa
+              TokenServiceKeyName: rmngm-xsuaa-key
               URL: ~{srv-api/srv-url}
-              sap.cloud.service: cpapp.service
-            - Name: cpapp-html5-repo-host
-              ServiceInstanceName: cpapp-html5-repo-host
-              ServiceKeyName: cpapp-html5-repo-host-key
-              sap.cloud.service: cpapp.service
+              sap.cloud.service: rmngm.service
+            - Name: rmngm-html5
+              ServiceInstanceName: rmngm-html5
+              ServiceKeyName: rmngm-html5-key
+              sap.cloud.service: rmngm.service
             - Authentication: OAuth2UserTokenExchange
-              Name: cpapp-uaa
-              ServiceInstanceName: cpapp-uaa
-              ServiceKeyName: cpapp-uaa-key
-              sap.cloud.service: cpapp.service
+              Name: rmngm-xsuaa
+              ServiceInstanceName: rmngm-xsuaa
+              ServiceKeyName: rmngm-xsuaa-key
+              sap.cloud.service: rmngm.service
           existing_destinations_policy: update
     build-parameters:
       no-source: true
-  - name: cpapp-app-content
+  - name: rmngm-app-content
     type: com.sap.application.content
     path: .
     requires:
-      - name: cpapp-html5-repo-host
+      - name: rmngm-html5
         parameters:
           content-target: true
     build-parameters:
@@ -102,12 +102,12 @@ modules:
         - npm run build:cf
       supported-platforms: []
 resources:
-  - name: cpapp-db
+  - name: rmngm-db
     type: com.sap.xs.hdi-container
     parameters:
       service: hana
       service-plan: hdi-shared
-  - name: cpapp-uaa
+  - name: rmngm-xsuaa
     type: org.cloudfoundry.managed-service
     parameters:
       config:
@@ -121,11 +121,11 @@ resources:
             role-template-references:
               - $XSAPPNAME.RiskViewer
         tenant-mode: dedicated
-        xsappname: cpapp-${org}-${space}
+        xsappname: rmngm-${org}-${space}
       path: ./xs-security.json
       service: xsuaa
       service-plan: application
-  - name: cpapp-destination
+  - name: rmngm-destination
     type: org.cloudfoundry.managed-service
     parameters:
       config:
@@ -141,12 +141,12 @@ resources:
             existing_destinations_policy: update
       service: destination
       service-plan: lite
-  - name: cpapp-html5-repo-host
+  - name: rmngm-html5
     type: org.cloudfoundry.managed-service
     parameters:
       service: html5-apps-repo
       service-plan: app-host
-  - name: cpapp-logs
+  - name: rmngm-logs
     type: org.cloudfoundry.managed-service
     parameters:
       service: application-logs
